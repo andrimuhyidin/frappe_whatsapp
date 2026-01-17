@@ -170,6 +170,13 @@
    "description": "JSON array: [{\"id\": \"yes\", \"title\": \"Yes\"}, {\"id\": \"no\", \"title\": \"No\"}]"
   },
   {
+   "fieldname": "interactive_data",
+   "fieldtype": "JSON",
+   "label": "Interactive Data",
+   "hidden": 1,
+   "description": "Stores full structure for complex interactive messages (List/Product)"
+  },
+  {
    "fieldname": "section_break_iyjf",
    "fieldtype": "Section Break"
   },

@@ -73,6 +73,16 @@ def webhook():
 	if any_secret_configured and signature_header:
 		if not verify_webhook_signature(payload_bytes, signature_header):
 			frappe.log_error("Invalid webhook signature", "WhatsApp Security")
+			
+			# Log failed attempt
+			frappe.get_doc({
+				"doctype": "WhatsApp Webhook Log",
+				"timestamp": frappe.utils.now(),
+				"request_data": payload_bytes.decode('utf-8', errors='ignore'),
+				"headers": json.dumps(dict(frappe.request.headers)),
+				"error": "Invalid Signature"
+			}).insert(ignore_permissions=True)
+			
 			return Response("Forbidden", status=403)
 	
 	data = frappe.local.form_dict
@@ -88,13 +98,27 @@ def webhook():
 
 
 
+@frappe.whitelist()
 def process_webhook_data(data):
 	"""Process webhook data in background."""
-	frappe.get_doc({
-		"doctype": "WhatsApp Notification Log",
-		"template": "Webhook",
-		"meta_data": json.dumps(data)
-	}).insert(ignore_permissions=True)
+	try:
+		frappe.get_doc({
+			"doctype": "WhatsApp Webhook Log",
+			"timestamp": frappe.utils.now(),
+			"request_data": json.dumps(data),
+			"headers": json.dumps(frappe.local.request.headers) if hasattr(frappe.local, 'request') else "{}"
+		}).insert(ignore_permissions=True)
+	except Exception:
+		# Fallback or ignore if log fails, main priority is processing
+		pass
+		
+	# Legacy logging just in case (optional, we can remove)
+	# frappe.get_doc({
+	# 	"doctype": "WhatsApp Notification Log",
+	# 	"template": "Webhook",
+	# 	"meta_data": json.dumps(data)
+	# }).insert(ignore_permissions=True)
+	
 	frappe.db.commit()
 
 	messages = []
