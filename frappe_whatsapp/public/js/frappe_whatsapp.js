@@ -60,7 +60,7 @@ $(document).on("app_ready", function () {
                 },
               ],
               primary_action_label: "Send",
-              title: "Send a Telegram Message",
+              title: "Send a WhatsApp Message",
               primary_action: function () {
                 var values = dialog.get_values();
                 if (values) {
