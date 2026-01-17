@@ -217,5 +217,14 @@ doc_events = {
         "after_delete": "frappe_whatsapp.utils.run_server_script_for_doc_event",
         "before_update_after_submit": "frappe_whatsapp.utils.run_server_script_for_doc_event",
         "on_update_after_submit": "frappe_whatsapp.utils.run_server_script_for_doc_event"
+    },
+    "Sales Invoice": {
+        "on_submit": "frappe_whatsapp.integrations.commerce.notify_invoice_submission"
+    },
+    "Payment Entry": {
+        "on_submit": "frappe_whatsapp.integrations.commerce.notify_payment_received"
+    },
+    "Travel Booking": {
+        "on_update": "frappe_whatsapp.integrations.commerce.notify_travel_booking"
     }
 }
