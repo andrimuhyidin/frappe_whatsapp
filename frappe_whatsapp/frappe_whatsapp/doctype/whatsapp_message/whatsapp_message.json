@@ -368,21 +368,9 @@
    "read": 1,
    "report": 0,
    "role": "WhatsApp Agent",
-   "share": 0,
-   "write": 1
-  },
-  {
-   "create": 1,
-   "delete": 0,
-   "email": 1,
-   "export": 0,
-   "print": 1,
-   "read": 1,
-   "report": 0,
-   "role": "WhatsApp Agent",
-   "share": 0,
    "write": 1
   }
+
  ],
  "quick_entry": 1,
  "row_format": "Dynamic",
