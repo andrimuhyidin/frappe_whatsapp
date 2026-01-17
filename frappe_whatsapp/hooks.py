@@ -7,6 +7,16 @@ app_description = "WhatsApp integration for frappe"
 app_email = "shridhar.p@zerodha.com"
 app_license = "MIT"
 
+# Module Setup
+# ------------
+setup = {
+    "module_icon": "message-circle",
+    "module_name": "Frappe Whatsapp",
+    "type": "module",
+    "color": "#25D366",
+    "category": "Integrations"
+}
+
 # Includes in <head>
 # ------------------
 

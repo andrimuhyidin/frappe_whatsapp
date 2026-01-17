@@ -1,0 +1,232 @@
+{
+ "charts": [
+  {
+   "chart_name": "Message Status Overview",
+   "label": "Message Status"
+  }
+ ],
+ "number_cards": [
+  {
+   "number_card_name": "Messages Sent Today"
+  }
+ ],
+ "content": "[{\"id\":\"config-section\",\"type\":\"header\",\"data\":{\"text\":\"Configuration\",\"col\":12}},{\"id\":\"whatsapp-account\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"WhatsApp Account\",\"col\":3}},{\"id\":\"whatsapp-templates\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"WhatsApp Templates\",\"col\":3}},{\"id\":\"whatsapp-notification\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"WhatsApp Notification\",\"col\":3}},{\"id\":\"whatsapp-flow\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"WhatsApp Flow\",\"col\":3}},{\"id\":\"messaging-section\",\"type\":\"header\",\"data\":{\"text\":\"Messaging & Campaigns\",\"col\":12}},{\"id\":\"whatsapp-message\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"WhatsApp Message\",\"col\":3}},{\"id\":\"whatsapp-campaign\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"WhatsApp Campaign\",\"col\":3}},{\"id\":\"quick-reply\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"WhatsApp Quick Reply\",\"col\":3}},{\"id\":\"analytics-section\",\"type\":\"header\",\"data\":{\"text\":\"Analytics & Logs\",\"col\":12}},{\"id\":\"whatsapp-analytics\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"WhatsApp Analytics\",\"col\":3}},{\"id\":\"webhook-log\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"WhatsApp Webhook Log\",\"col\":3}},{\"id\":\"notification-log\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"WhatsApp Notification Log\",\"col\":3}}]",
+ "creation": "2026-01-17 20:30:00.000000",
+ "custom_blocks": [],
+ "docstatus": 0,
+ "doctype": "Workspace",
+ "for_user": "",
+ "hide_custom": 0,
+ "icon": "message-circle",
+ "idx": 0,
+ "is_hidden": 0,
+ "label": "WhatsApp Core",
+ "links": [
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Configuration",
+   "link_count": 0,
+   "onboard": 0,
+   "type": "Card Break"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "WhatsApp Account",
+   "link_count": 0,
+   "link_to": "WhatsApp Account",
+   "link_type": "DocType",
+   "onboard": 1,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "WhatsApp Templates",
+   "link_count": 0,
+   "link_to": "WhatsApp Templates",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "WhatsApp Notification",
+   "link_count": 0,
+   "link_to": "WhatsApp Notification",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "WhatsApp Flow",
+   "link_count": 0,
+   "link_to": "WhatsApp Flow",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Messaging & Campaigns",
+   "link_count": 0,
+   "onboard": 0,
+   "type": "Card Break"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "WhatsApp Message",
+   "link_count": 0,
+   "link_to": "WhatsApp Message",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "WhatsApp Campaign",
+   "link_count": 0,
+   "link_to": "WhatsApp Campaign",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "WhatsApp Quick Reply",
+   "link_count": 0,
+   "link_to": "WhatsApp Quick Reply",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Analytics & Logs",
+   "link_count": 0,
+   "onboard": 0,
+   "type": "Card Break"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "WhatsApp Analytics",
+   "link_count": 0,
+   "link_to": "WhatsApp Analytics",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "WhatsApp Webhook Log",
+   "link_count": 0,
+   "link_to": "WhatsApp Webhook Log",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "WhatsApp Notification Log",
+   "link_count": 0,
+   "link_to": "WhatsApp Notification Log",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  }
+ ],
+ "modified": "2026-01-17 20:30:00.000000",
+ "modified_by": "Administrator",
+ "module": "Frappe Whatsapp",
+ "name": "WhatsApp Core",
+ "owner": "Administrator",
+ "parent": null,
+ "public": 1,
+ "quick_lists": [],
+ "roles": [],
+ "sequence_id": 1,
+ "shortcuts": [
+  {
+   "color": "Blue",
+   "format": "{} Active",
+   "label": "WhatsApp Account",
+   "link_to": "WhatsApp Account",
+   "stats_filter": "{\"status\": \"Active\"}",
+   "type": "DocType"
+  },
+  {
+   "color": "Green",
+   "format": "{} Approved",
+   "label": "WhatsApp Templates",
+   "link_to": "WhatsApp Templates",
+   "stats_filter": "{\"status\": \"APPROVED\"}",
+   "type": "DocType"
+  },
+  {
+   "color": "Orange",
+   "label": "WhatsApp Notification",
+   "link_to": "WhatsApp Notification",
+   "type": "DocType"
+  },
+  {
+   "color": "Purple",
+   "label": "WhatsApp Flow",
+   "link_to": "WhatsApp Flow",
+   "type": "DocType"
+  },
+  {
+   "color": "Grey",
+   "format": "{} Total",
+   "label": "WhatsApp Message",
+   "link_to": "WhatsApp Message",
+   "type": "DocType"
+  },
+  {
+   "color": "Cyan",
+   "format": "{} Running",
+   "label": "WhatsApp Campaign",
+   "link_to": "WhatsApp Campaign",
+   "stats_filter": "{\"status\": \"Running\"}",
+   "type": "DocType"
+  },
+  {
+   "color": "Yellow",
+   "label": "WhatsApp Quick Reply",
+   "link_to": "WhatsApp Quick Reply",
+   "type": "DocType"
+  },
+  {
+   "color": "Green",
+   "label": "WhatsApp Analytics",
+   "link_to": "WhatsApp Analytics",
+   "type": "DocType"
+  },
+  {
+   "color": "Red",
+   "format": "{} Errors",
+   "label": "WhatsApp Webhook Log",
+   "link_to": "WhatsApp Webhook Log",
+   "stats_filter": "{\"error\": [\"is\", \"set\"]}",
+   "type": "DocType"
+  },
+  {
+   "color": "Grey",
+   "label": "WhatsApp Notification Log",
+   "link_to": "WhatsApp Notification Log",
+   "type": "DocType"
+  }
+ ],
+ "title": "WhatsApp Core"
+}

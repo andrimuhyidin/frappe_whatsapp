@@ -1,0 +1,18 @@
+{
+ "creation": "2026-01-17 20:40:00.000000",
+ "docstatus": 0,
+ "doctype": "Number Card",
+ "document_type": "WhatsApp Message",
+ "filters_json": "[[\"WhatsApp Message\", \"type\", \"=\", \"Outgoing\"]]",
+ "function": "Count",
+ "is_public": 1,
+ "label": "Messages Sent Today",
+ "modified": "2026-01-17 20:40:00.000000",
+ "modified_by": "Administrator",
+ "module": "Frappe Whatsapp",
+ "name": "Messages Sent Today",
+ "owner": "Administrator",
+ "show_percentage_stats": 1,
+ "stats_time_interval": "Daily",
+ "type": "Document Type"
+}
