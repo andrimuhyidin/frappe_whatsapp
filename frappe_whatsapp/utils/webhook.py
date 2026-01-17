@@ -262,12 +262,13 @@ def update_status(data):
 
 def update_template_status(data):
 	"""Update template status."""
-	frappe.db.sql(
-		"""UPDATE `tabWhatsApp Templates`
-		SET status = %(event)s
-		WHERE id = %(message_template_id)s""",
-		data
-	)
+	# Refactored to QueryBuilder
+	wt = frappe.qb.DocType("WhatsApp Templates")
+	(
+		frappe.qb.update(wt)
+		.set(wt.status, data['event'])
+		.where(wt.id == data['message_template_id'])
+	).run()
 
 def update_message_status(data):
 	"""Update message status."""

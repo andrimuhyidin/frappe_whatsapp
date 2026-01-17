@@ -1,4 +1,5 @@
 import frappe
+from frappe.query_builder import Order
 
 
 def execute(filters=None):
@@ -77,32 +78,25 @@ def get_columns():
     ]
 
 def get_data(filters):
-    conditions = ""
+    # Refactored to QueryBuilder
+    bwm = frappe.qb.DocType("Bulk WhatsApp Message")
+    query = (
+        frappe.qb.from_(bwm)
+        .select(bwm.name, bwm.title, bwm.creation, bwm.recipient_count, bwm.sent_count, bwm.status)
+        .where(bwm.docstatus == 1)
+        .orderby(bwm.creation, order=Order.desc)
+    )
+
     if filters.get("from_date") and filters.get("to_date"):
-        conditions += " AND creation BETWEEN %(from_date)s AND %(to_date)s"
+        query = query.where(bwm.creation[filters.get("from_date"):filters.get("to_date")])
     
     if filters.get("status"):
-        conditions += " AND status = %(status)s"
+        query = query.where(bwm.status == filters.get("status"))
         
     if filters.get("from_number"):
-        conditions += " AND from_number = %(from_number)s"
+        query = query.where(bwm.from_number == filters.get("from_number"))
     
-    data = frappe.db.sql("""
-        SELECT 
-            name, 
-            title, 
-            creation, 
-            recipient_count, 
-            sent_count, 
-            status 
-        FROM 
-            `tabBulk WhatsApp Message` 
-        WHERE 
-            docstatus = 1 
-            {conditions}
-        ORDER BY 
-            creation DESC
-    """.format(conditions=conditions), filters, as_dict=1)
+    data = query.run(as_dict=True)
     
     # Fetch additional stats for each bulk message
     for row in data:
