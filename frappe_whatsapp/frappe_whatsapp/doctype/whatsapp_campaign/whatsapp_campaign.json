@@ -1,0 +1,162 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2026-01-17 21:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "campaign_name",
+  "status",
+  "whatsapp_account",
+  "column_break_main",
+  "template",
+  "scheduled_time",
+  "section_break_audience",
+  "audience_type",
+  "target_tags",
+  "section_break_stats",
+  "total_recipients",
+  "sent_count",
+  "column_break_stats",
+  "delivered_count",
+  "failed_count",
+  "section_break_recipients",
+  "recipients"
+ ],
+ "fields": [
+  {
+   "fieldname": "campaign_name",
+   "fieldtype": "Data",
+   "label": "Campaign Name",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "default": "Draft",
+   "fieldname": "status",
+   "fieldtype": "Select",
+   "label": "Status",
+   "options": "Draft\nScheduled\nRunning\nCompleted\nCancelled",
+   "read_only": 1,
+   "in_list_view": 1,
+   "in_standard_filter": 1
+  },
+  {
+   "fieldname": "whatsapp_account",
+   "fieldtype": "Link",
+   "label": "WhatsApp Account",
+   "options": "WhatsApp Account",
+   "reqd": 1
+  },
+  {
+   "fieldname": "column_break_main",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "template",
+   "fieldtype": "Link",
+   "label": "Message Template",
+   "options": "WhatsApp Templates",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "scheduled_time",
+   "fieldtype": "Datetime",
+   "label": "Scheduled Time"
+  },
+  {
+   "fieldname": "section_break_audience",
+   "fieldtype": "Section Break",
+   "label": "Audience"
+  },
+  {
+   "default": "Custom",
+   "fieldname": "audience_type",
+   "fieldtype": "Select",
+   "label": "Audience Type",
+   "options": "Custom\nTagged Contacts\nAll Contacts"
+  },
+  {
+   "depends_on": "eval:doc.audience_type=='Tagged Contacts'",
+   "fieldname": "target_tags",
+   "fieldtype": "Table MultiSelect",
+   "label": "Target Tags",
+   "options": "WhatsApp Contact Tag"
+  },
+  {
+   "fieldname": "section_break_stats",
+   "fieldtype": "Section Break",
+   "label": "Statistics"
+  },
+  {
+   "default": "0",
+   "fieldname": "total_recipients",
+   "fieldtype": "Int",
+   "label": "Total Recipients",
+   "read_only": 1
+  },
+  {
+   "default": "0",
+   "fieldname": "sent_count",
+   "fieldtype": "Int",
+   "label": "Sent",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_stats",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "0",
+   "fieldname": "delivered_count",
+   "fieldtype": "Int",
+   "label": "Delivered",
+   "read_only": 1
+  },
+  {
+   "default": "0",
+   "fieldname": "failed_count",
+   "fieldtype": "Int",
+   "label": "Failed",
+   "read_only": 1
+  },
+  {
+   "fieldname": "section_break_recipients",
+   "fieldtype": "Section Break",
+   "label": "Recipients"
+  },
+  {
+   "fieldname": "recipients",
+   "fieldtype": "Table",
+   "label": "Recipients List",
+   "options": "WhatsApp Campaign Recipient"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2026-01-17 21:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Frappe Whatsapp",
+ "name": "WhatsApp Campaign",
+ "naming_rule": "By fieldname",
+ "autoname": "field:campaign_name",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

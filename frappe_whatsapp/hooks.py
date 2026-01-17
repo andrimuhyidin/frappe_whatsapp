@@ -118,7 +118,8 @@ scheduler_events = {
     "all": [
         "frappe_whatsapp.utils.trigger_whatsapp_notifications_all",
         "frappe_whatsapp.utils.process_retries",
-        "frappe_whatsapp.utils.scheduler.process_scheduled_messages"
+        "frappe_whatsapp.utils.scheduler.process_scheduled_messages",
+        "frappe_whatsapp.utils.campaign_engine.process_campaigns"
     ],
     "hourly": [
         "frappe_whatsapp.utils.trigger_whatsapp_notifications_hourly"
