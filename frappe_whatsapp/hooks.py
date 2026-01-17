@@ -17,6 +17,16 @@ setup = {
     "category": "Integrations"
 }
 
+add_to_apps_screen = [
+    {
+        "name": "frappe_whatsapp",
+        "title": "WhatsApp Integration",
+        "icon": "/assets/frappe_whatsapp/images/whatsapp-logo.png",
+        "route": "/desk#workspace/WhatsApp%20Integration",
+        "description": "WhatsApp Configuration and Management"
+    }
+]
+
 # Includes in <head>
 # ------------------
 
