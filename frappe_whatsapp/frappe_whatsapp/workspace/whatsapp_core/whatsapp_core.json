@@ -1,10 +1,6 @@
 {
- "charts": [
-  {
-   "chart_name": "Message Status Overview",
-   "label": "Message Status"
-  }
- ],
+ "app": "frappe_whatsapp",
+ "charts": [],
  "number_cards": [
   {
    "number_card_name": "Messages Sent Today"
