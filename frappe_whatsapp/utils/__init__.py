@@ -141,3 +141,27 @@ def format_number(number):
         number = number[1 : len(number)]
 
     return number
+
+
+def process_retries():
+    """Find and retry failed WhatsApp messages that are due."""
+    from frappe.utils import now_datetime
+    
+    # Find messages with status 'Retrying' and next_retry_time <= now
+    messages_to_retry = frappe.get_all(
+        "WhatsApp Message",
+        filters={
+            "status": "Retrying",
+            "next_retry_time": ["<=", now_datetime()]
+        },
+        fields=["name"]
+    )
+
+    for msg in messages_to_retry:
+        try:
+            doc = frappe.get_doc("WhatsApp Message", msg.name)
+            doc.send()
+            doc.save(ignore_permissions=True)
+            frappe.db.commit()
+        except Exception as e:
+            frappe.log_error(f"Retry failed for {msg.name}: {str(e)}", "WhatsApp Retry Error")

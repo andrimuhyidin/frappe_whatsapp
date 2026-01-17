@@ -50,131 +50,259 @@ class WhatsAppMessage(Document):
             else:
                 self.whatsapp_account = default_whatsapp_account.name
 
-    """Send whats app messages."""
     def before_insert(self):
-        """Send message."""
+        """Send message if it's Outgoing and not already Sent."""
         self.set_whatsapp_account()
-        if self.type == "Outgoing" and self.message_type != "Template":
-            if self.attach and not self.attach.startswith("http"):
-                link = frappe.utils.get_url() + "/" + self.attach
+        if self.type == "Outgoing" and self.status != "Success":
+            # Just mark for sending or try immediate send
+            # For robustness, we try immediate send
+            self.send()
+
+    def send(self):
+        """Standard send method for all types of outgoing messages."""
+        if self.type != "Outgoing":
+            return
+
+        # Internal notes should not be sent to WhatsApp
+        if self.is_internal_note:
+            self.status = "Success" # Mark as success so it doesn't get retried
+            return
+
+        try:
+            if self.message_type == "Template":
+                self._send_template()
             else:
-                link = self.attach
+                self._send_text_or_media()
+            
+            self.status = "Success"
+            self.retry_count = 0
+            self.next_retry_time = None
+            self.last_error = None
+        except Exception as e:
+            self.status = "Failed"
+            self.last_error = str(e)
+            self.schedule_retry()
+            # We don't throw here any more to prevent blocking the transaction
+            # but we log it.
+            frappe.log_error(f"WhatsApp Send Failed: {str(e)}", "WhatsApp Send Error")
 
-            data = {
-                "messaging_product": "whatsapp",
-                "to": format_number(self.to),
-                "type": self.content_type,
+    def schedule_retry(self):
+        """Schedule next retry using exponential backoff."""
+        from frappe.utils import add_to_date, now_datetime
+        
+        MAX_RETRIES = 5
+        BACKOFF_MINUTES = [5, 15, 60, 240, 720] # 5m, 15m, 1h, 4h, 12h
+
+        if self.retry_count < MAX_RETRIES:
+            wait_time = BACKOFF_MINUTES[self.retry_count]
+            self.retry_count += 1
+            self.next_retry_time = add_to_date(now_datetime(), minutes=wait_time)
+            self.status = "Retrying"
+        else:
+            self.status = "Failed"
+            self.next_retry_time = None
+
+    @frappe.whitelist()
+    def retry_send(self):
+        """Force retry from UI."""
+        self.send()
+        self.save()
+
+    def _send_text_or_media(self):
+        """Handle sending text, media, interactive, and flow messages."""
+        if self.attach and not self.attach.startswith("http"):
+            link = frappe.utils.get_url() + "/" + self.attach
+        else:
+            link = self.attach
+
+        data = {
+            "messaging_product": "whatsapp",
+            "to": format_number(self.to),
+            "type": self.content_type,
+        }
+        if self.is_reply and self.reply_to_message_id:
+            data["context"] = {"message_id": self.reply_to_message_id}
+            
+        if self.content_type in ["document", "image", "video"]:
+            data[self.content_type.lower()] = {
+                "link": link,
+                "caption": self.message,
             }
-            if self.is_reply and self.reply_to_message_id:
-                data["context"] = {"message_id": self.reply_to_message_id}
-            if self.content_type in ["document", "image", "video"]:
-                data[self.content_type.lower()] = {
-                    "link": link,
-                    "caption": self.message,
-                }
-            elif self.content_type == "reaction":
-                data["reaction"] = {
-                    "message_id": self.reply_to_message_id,
-                    "emoji": self.message,
-                }
-            elif self.content_type == "text":
-                data["text"] = {"preview_url": True, "body": self.message}
+        elif self.content_type == "reaction":
+            data["reaction"] = {
+                "message_id": self.reply_to_message_id,
+                "emoji": self.message,
+            }
+        elif self.content_type == "text":
+            data["text"] = {"preview_url": True, "body": self.message}
 
-            elif self.content_type == "audio":
-                data["audio"] = {"link": link}
+        elif self.content_type == "audio":
+            data["audio"] = {"link": link}
 
-            elif self.content_type == "interactive":
-                # Interactive message (buttons or list)
-                data["type"] = "interactive"
-                buttons_data = json.loads(self.buttons) if isinstance(self.buttons, str) else self.buttons
+        elif self.content_type == "interactive":
+            # Interactive message (buttons or list)
+            data["type"] = "interactive"
+            buttons_data = json.loads(self.buttons) if isinstance(self.buttons, str) else self.buttons
 
-                if isinstance(buttons_data, list) and len(buttons_data) > 3:
-                    # Use list message for more than 3 options (max 10)
-                    data["interactive"] = {
-                        "type": "list",
-                        "body": {"text": self.message},
-                        "action": {
-                            "button": "Select Option",
-                            "sections": [{
-                                "title": "Options",
-                                "rows": [
-                                    {"id": btn["id"], "title": btn["title"], "description": btn.get("description", "")}
-                                    for btn in buttons_data[:10]
-                                ]
-                            }]
-                        }
-                    }
-                else:
-                    # Use button message for 3 or fewer options
-                    data["interactive"] = {
-                        "type": "button",
-                        "body": {"text": self.message},
-                        "action": {
-                            "buttons": [
-                                {
-                                    "type": "reply",
-                                    "reply": {"id": btn["id"], "title": btn["title"]}
-                                }
-                                for btn in buttons_data[:3]
-                            ]
-                        }
-                    }
-
-            elif self.content_type == "flow":
-                # WhatsApp Flow message
-                if not self.flow:
-                    frappe.throw(_("WhatsApp Flow is required for flow content type"))
-
-                flow_doc = frappe.get_doc("WhatsApp Flow", self.flow)
-
-                if not flow_doc.flow_id:
-                    frappe.throw(_("Flow must be created on WhatsApp before sending"))
-
-                # Determine flow mode - draft flows can be tested with mode: "draft"
-                flow_mode = None
-                if flow_doc.status != "Published":
-                    flow_mode = "draft"
-                    frappe.msgprint(_("Sending flow in draft mode (for testing only)"), indicator="orange")
-
-                # Get first screen if not specified
-                flow_screen = self.flow_screen
-                if not flow_screen and flow_doc.screens:
-                    flow_screen = flow_doc.screens[0].screen_id
-
-                data["type"] = "interactive"
+            if isinstance(buttons_data, list) and len(buttons_data) > 3:
                 data["interactive"] = {
-                    "type": "flow",
-                    "body": {"text": self.message or "Please fill out the form"},
+                    "type": "list",
+                    "body": {"text": self.message},
                     "action": {
-                        "name": "flow",
-                        "parameters": {
-                            "flow_message_version": "3",
-                            "flow_id": flow_doc.flow_id,
-                            "flow_cta": self.flow_cta or flow_doc.flow_cta or "Open",
-                            "flow_action": "navigate",
-                            "flow_action_payload": {
-                                "screen": flow_screen
+                        "button": "Select Option",
+                        "sections": [{
+                            "title": "Options",
+                            "rows": [
+                                {"id": btn["id"], "title": btn["title"], "description": btn.get("description", "")}
+                                for btn in buttons_data[:10]
+                            ]
+                        }]
+                    }
+                }
+            else:
+                data["interactive"] = {
+                    "type": "button",
+                    "body": {"text": self.message},
+                    "action": {
+                        "buttons": [
+                            {
+                                "type": "reply",
+                                "reply": {"id": btn["id"], "title": btn["title"]}
                             }
-                        }
+                            for btn in buttons_data[:3]
+                        ]
                     }
                 }
 
-                # Add draft mode for testing unpublished flows
-                if flow_mode:
-                    data["interactive"]["action"]["parameters"]["mode"] = flow_mode
+        elif self.content_type == "flow":
+            if not self.flow:
+                frappe.throw(_("WhatsApp Flow is required for flow content type"))
 
-                # Add flow token - generate one if not provided (required by WhatsApp)
-                flow_token = self.flow_token or frappe.generate_hash(length=16)
-                data["interactive"]["action"]["parameters"]["flow_token"] = flow_token
+            flow_doc = frappe.get_doc("WhatsApp Flow", self.flow)
+            if not flow_doc.flow_id:
+                frappe.throw(_("Flow must be created on WhatsApp before sending"))
 
-            try:
-                self.notify(data)
-                self.status = "Success"
-            except Exception as e:
-                self.status = "Failed"
-                frappe.throw(f"Failed to send message {str(e)}")
-        elif self.type == "Outgoing" and self.message_type == "Template" and not self.message_id:
-            self.send_template()
+            flow_mode = "draft" if flow_doc.status != "Published" else None
+            flow_screen = self.flow_screen or (flow_doc.screens[0].screen_id if flow_doc.screens else None)
+
+            data["type"] = "interactive"
+            data["interactive"] = {
+                "type": "flow",
+                "body": {"text": self.message or "Please fill out the form"},
+                "action": {
+                    "name": "flow",
+                    "parameters": {
+                        "flow_message_version": "3",
+                        "flow_id": flow_doc.flow_id,
+                        "flow_cta": self.flow_cta or flow_doc.flow_cta or "Open",
+                        "flow_action": "navigate",
+                        "flow_action_payload": {"screen": flow_screen}
+                    }
+                }
+            }
+            if flow_mode:
+                data["interactive"]["action"]["parameters"]["mode"] = flow_mode
+            
+            flow_token = self.flow_token or frappe.generate_hash(length=16)
+            data["interactive"]["action"]["parameters"]["flow_token"] = flow_token
+
+        self.notify(data)
+
+    def _send_template(self):
+        """Logic for sending template messages."""
+        template = frappe.get_doc("WhatsApp Templates", self.template)
+        data = {
+            "messaging_product": "whatsapp",
+            "to": format_number(self.to),
+            "type": "template",
+            "template": {
+                "name": template.actual_name or template.template_name,
+                "language": {"code": template.language_code},
+                "components": [],
+            },
+        }
+
+        if template.sample_values:
+            field_names = template.field_names.split(",") if template.field_names else template.sample_values.split(",")
+            parameters = []
+            template_parameters = []
+
+            if self.body_param is not None:
+                params = list(json.loads(self.body_param).values())
+                for param in params:
+                    parameters.append({"type": "text", "text": param})
+                    template_parameters.append(param)
+            elif self.flags.custom_ref_doc:
+                custom_values = self.flags.custom_ref_doc
+                for field_name in field_names:
+                    value = custom_values.get(field_name.strip())
+                    parameters.append({"type": "text", "text": value})
+                    template_parameters.append(value)                    
+
+            else:
+                ref_doc = frappe.get_doc(self.reference_doctype, self.reference_name)
+                for field_name in field_names:
+                    value = ref_doc.get_formatted(field_name.strip())
+                    parameters.append({"type": "text", "text": value})
+                    template_parameters.append(value)
+
+            self.template_parameters = json.dumps(template_parameters)
+            data["template"]["components"].append(
+                {
+                    "type": "body",
+                    "parameters": parameters,
+                }
+            )
+
+        if template.header_type:
+            if self.attach:
+                url = self.attach if self.attach.startswith("http") else f'{frappe.utils.get_url()}{self.attach}'
+                if template.header_type == 'IMAGE':
+                    data['template']['components'].append({
+                        "type": "header",
+                        "parameters": [{"type": "image", "image": {"link": url}}]
+                    })
+            elif template.sample:
+                url = template.sample if template.sample.startswith("http") else f'{frappe.utils.get_url()}{template.sample}'
+                if template.header_type == 'IMAGE':
+                    data['template']['components'].append({
+                        "type": "header",
+                        "parameters": [{"type": "image", "image": {"link": url}}]
+                    })
+
+        if template.buttons:
+            button_parameters = []
+            for idx, btn in enumerate(template.buttons):
+                if btn.button_type == "Quick Reply":
+                    button_parameters.append({
+                        "type": "button",
+                        "sub_type": "quick_reply",
+                        "index": str(idx),
+                        "parameters": [{"type": "payload", "payload": btn.button_label}]
+                    })
+                elif btn.button_type == "Call Phone":
+                    button_parameters.append({
+                        "type": "button",
+                        "sub_type": "phone_number",
+                        "index": str(idx),
+                        "parameters": [{"type": "text", "text": btn.phone_number}]
+                    })
+                elif btn.button_type == "Visit Website":
+                    url = btn.website_url
+                    if btn.url_type == "Dynamic":
+                        ref_doc = frappe.get_doc(self.reference_doctype, self.reference_name)
+                        url = ref_doc.get_formatted(btn.website_url)
+                    button_parameters.append({
+                        "type": "button",
+                        "sub_type": "url",
+                        "index": str(idx),
+                        "parameters": [{"type": "text", "text": url}]
+                    })
+
+            if button_parameters:
+                data['template']['components'].extend(button_parameters)
+
+        self.notify(data)
 
         self.create_whatsapp_profile()
 

@@ -41,7 +41,10 @@
   "reference_doctype",
   "bulk_message_reference",
   "column_break_efrb",
-  "reference_name"
+  "reference_name",
+  "retry_count",
+  "next_retry_time",
+  "last_error"
  ],
  "fields": [
   {
@@ -272,6 +275,31 @@
    "fieldtype": "JSON",
    "label": "Flow Response Data",
    "read_only": 1
+  },
+  {
+   "fieldname": "retry_count",
+   "fieldtype": "Int",
+   "label": "Retry Count",
+   "default": "0",
+   "read_only": 1
+  },
+  {
+   "fieldname": "next_retry_time",
+   "fieldtype": "Datetime",
+   "label": "Next Retry Time",
+   "read_only": 1
+  },
+  {
+   "fieldname": "last_error",
+   "fieldtype": "Small Text",
+   "label": "Last Error",
+   "read_only": 1
+  },
+  {
+   "default": "0",
+   "fieldname": "is_internal_note",
+   "fieldtype": "Check",
+   "label": "Is Internal Note"
   }
  ],
  "index_web_pages_for_search": 1,
