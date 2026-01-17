@@ -1,0 +1,215 @@
+{
+ "charts": [
+  {
+   "chart_name": "Message Status Overview",
+   "label": "Message Status Overview"
+  }
+ ],
+ "content": "[{\"id\":\"core-header\",\"type\":\"header\",\"data\":{\"text\":\"WhatsApp Core\",\"col\":12}},{\"id\":\"wa-account\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"WhatsApp Account\",\"col\":3}},{\"id\":\"wa-template\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"WhatsApp Templates\",\"col\":3}},{\"id\":\"wa-campaign\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"WhatsApp Campaign\",\"col\":3}},{\"id\":\"wa-analytics\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"WhatsApp Analytics\",\"col\":3}},{\"id\":\"ai-header\",\"type\":\"header\",\"data\":{\"text\":\"AI Automation\",\"col\":12}},{\"id\":\"wa-chatbot\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"WhatsApp Chatbot\",\"col\":3}},{\"id\":\"wa-kb\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"WhatsApp Knowledge Base\",\"col\":3}},{\"id\":\"wa-flow\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"WhatsApp Chatbot Flow\",\"col\":3}},{\"id\":\"agent-header\",\"type\":\"header\",\"data\":{\"text\":\"Agent Console\",\"col\":12}},{\"id\":\"wa-chat-page\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"WhatsApp Chat Page\",\"col\":3}},{\"id\":\"wa-contact\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"WhatsApp Contact\",\"col\":3}},{\"id\":\"wa-queue\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"WhatsApp Agent Queue\",\"col\":3}}]",
+ "creation": "2026-01-17 22:00:00.000000",
+ "docstatus": 0,
+ "doctype": "Workspace",
+ "for_user": "",
+ "hide_custom": 0,
+ "icon": "message-circle",
+ "idx": 0,
+ "is_hidden": 0,
+ "label": "WhatsApp Integration",
+ "links": [
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Core Configuration",
+   "link_count": 0,
+   "onboard": 0,
+   "type": "Card Break"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "WhatsApp Account",
+   "link_count": 0,
+   "link_to": "WhatsApp Account",
+   "link_type": "DocType",
+   "onboard": 1,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "WhatsApp Templates",
+   "link_count": 0,
+   "link_to": "WhatsApp Templates",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "WhatsApp Notification",
+   "link_count": 0,
+   "link_to": "WhatsApp Notification",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "AI & Chatbot",
+   "link_count": 0,
+   "onboard": 0,
+   "type": "Card Break"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "WhatsApp Chatbot",
+   "link_count": 0,
+   "link_to": "WhatsApp Chatbot",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "WhatsApp Knowledge Base",
+   "link_count": 0,
+   "link_to": "WhatsApp Knowledge Base",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "WhatsApp Keyword Reply",
+   "link_count": 0,
+   "link_to": "WhatsApp Keyword Reply",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Agent Operations",
+   "link_count": 0,
+   "onboard": 0,
+   "type": "Card Break"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "WhatsApp Chat",
+   "link_count": 0,
+   "link_to": "chat",
+   "link_type": "Page",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "WhatsApp Contact",
+   "link_count": 0,
+   "link_to": "WhatsApp Contact",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "WhatsApp Agent Queue",
+   "link_count": 0,
+   "link_to": "WhatsApp Agent Queue",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  }
+ ],
+ "modified": "2026-01-17 22:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Frappe Whatsapp",
+ "name": "WhatsApp Integration",
+ "number_cards": [
+  {
+   "number_card_name": "Messages Sent Today"
+  },
+  {
+   "number_card_name": "Active AI Sessions"
+  },
+  {
+   "number_card_name": "Total Contacts"
+  }
+ ],
+ "owner": "Administrator",
+ "public": 1,
+ "roles": [],
+ "shortcuts": [
+  {
+   "color": "Green",
+   "label": "WhatsApp Account",
+   "link_to": "WhatsApp Account",
+   "type": "DocType"
+  },
+  {
+   "color": "Blue",
+   "label": "WhatsApp Templates",
+   "link_to": "WhatsApp Templates",
+   "type": "DocType"
+  },
+  {
+   "color": "Orange",
+   "label": "WhatsApp Campaign",
+   "link_to": "WhatsApp Campaign",
+   "type": "DocType"
+  },
+  {
+   "color": "Red",
+   "label": "WhatsApp Analytics",
+   "link_to": "WhatsApp Analytics",
+   "type": "DocType"
+  },
+  {
+   "color": "Purple",
+   "label": "WhatsApp Chatbot",
+   "link_to": "WhatsApp Chatbot",
+   "type": "DocType"
+  },
+  {
+   "color": "Yellow",
+   "label": "WhatsApp Knowledge Base",
+   "link_to": "WhatsApp Knowledge Base",
+   "type": "DocType"
+  },
+  {
+   "color": "Cyan",
+   "label": "WhatsApp Chatbot Flow",
+   "link_to": "WhatsApp Chatbot Flow",
+   "type": "DocType"
+  },
+  {
+   "color": "Green",
+   "label": "WhatsApp Chat Page",
+   "link_to": "chat",
+   "type": "Page"
+  },
+  {
+   "color": "Blue",
+   "label": "WhatsApp Contact",
+   "link_to": "WhatsApp Contact",
+   "type": "DocType"
+  },
+  {
+   "color": "Grey",
+   "label": "WhatsApp Agent Queue",
+   "link_to": "WhatsApp Agent Queue",
+   "type": "DocType"
+  }
+ ],
+ "title": "WhatsApp Integration"
+}

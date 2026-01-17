@@ -58,7 +58,41 @@ class TestCampaign(FrappeTestCase):
         self.assertEqual(campaign.recipients[0].status, "Sent")
         self.assertEqual(campaign.sent_count, 1)
 
-    def test_populate_recipients(self):
-        # Test Tag filtering logic mock
-        # We need a tagged contact
-        pass
+    def test_tagged_contacts_population(self):
+        # 1. Create a tag
+        if not frappe.db.exists("WhatsApp Contact Tag", "Test Tag"):
+            frappe.get_doc({
+                "doctype": "WhatsApp Contact Tag",
+                "tag_name": "Test Tag"
+            }).insert(ignore_permissions=True)
+            
+        # 2. Assign tag to contact
+        self.contact.append("tags", {"tag_name": "Test Tag"})
+        self.contact.save(ignore_permissions=True)
+        
+        # 3. Create campaign targeting this tag
+        campaign = frappe.new_doc("WhatsApp Campaign")
+        campaign.campaign_name = "Tagged Campaign"
+        campaign.template = self.template.name
+        campaign.whatsapp_account = self.account.name
+        campaign.audience_type = "Tagged Contacts"
+        campaign.append("target_tags", {"tag_name": "Test Tag"})
+        campaign.status = "Draft"
+        campaign.insert(ignore_permissions=True)
+        
+        # 4. Run populate recipients
+        # This will use our new optimized SQL query
+        populate_recipients(campaign)
+        
+        campaign.reload()
+        
+        # 5. Verify results
+        self.assertEqual(len(campaign.recipients), 1)
+        self.assertEqual(campaign.recipients[0].mobile_no, "9999999999")
+        
+        # 6. Verify non-match
+        campaign.target_tags = [] # Clear tags
+        campaign.append("target_tags", {"tag_name": "Non Existent Tag"})
+        populate_recipients(campaign)
+        campaign.reload()
+        self.assertEqual(len(campaign.recipients), 0)

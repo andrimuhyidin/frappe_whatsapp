@@ -56,13 +56,10 @@ def populate_recipients(doc):
     recipients = []
     
     if doc.audience_type == "All Contacts":
-        contacts = frappe.get_all("WhatsApp Contact", fields=["contact_name", "mobile_no"])
-        for c in contacts:
-            recipients.append({
-                "contact_name": c.contact_name,
-                "mobile_no": c.mobile_no,
-                "status": "Pending"
-            })
+        recipients = frappe.db.get_all(
+            "WhatsApp Contact",
+            fields=["contact_name as contact_name", "mobile_no as mobile_no", "'Pending' as status"]
+        )
             
     elif doc.audience_type == "Tagged Contacts":
         if not doc.target_tags:
@@ -70,26 +67,25 @@ def populate_recipients(doc):
             
         target_tags = [t.tag_name for t in doc.target_tags]
         
-        # This query is simplified; in real SQL might need JOIN or loop
-        # For now assuming we fetch all and filter in python for flexibility
-        all_contacts = frappe.get_all("WhatsApp Contact", fields=["name", "contact_name", "mobile_no"])
-        
-        # Need to fetch tags for each contact (or improve query performance later)
-        for c in all_contacts:
-            contact_doc = frappe.get_doc("WhatsApp Contact", c.name)
-            contact_tags = [t.tag_name for t in contact_doc.tags]
-            
-            # Check overlap
-            if any(tag in target_tags for tag in contact_tags):
-                recipients.append({
-                    "contact_name": c.contact_name,
-                    "mobile_no": c.mobile_no,
-                    "status": "Pending"
-                })
+        # Optimized query using JOINs to fetch contacts with matching tags
+        # Avoids N+1 lookups
+        recipients = frappe.db.sql("""
+            SELECT DISTINCT
+                wc.contact_name,
+                wc.mobile_no,
+                'Pending' as status
+            FROM
+                `tabWhatsApp Contact` wc
+            JOIN
+                `tabWhatsApp Contact Tag` wct ON wct.parent = wc.name
+            WHERE
+                wct.tags IN %s
+        """, (target_tags,), as_dict=1)
     
-    # Clear existing and add new
-    doc.set("recipients", [])
-    doc.extend("recipients", recipients)
+    # Batch add child table rows for better performance
+    if recipients:
+        doc.set("recipients", [])
+        doc.extend("recipients", recipients)
 
 
 def process_campaign_batch(campaign_name, batch_size=20):
