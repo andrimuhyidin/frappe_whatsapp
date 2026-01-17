@@ -3,10 +3,55 @@ import frappe
 import json
 import requests
 import time
+import hashlib
+import hmac
 from werkzeug.wrappers import Response
 import frappe.utils
 
 from frappe_whatsapp.utils import get_whatsapp_account
+
+
+def verify_webhook_signature(payload_bytes, signature_header):
+	"""
+	Verify the incoming webhook request signature from Meta.
+	Returns True if valid, False otherwise.
+	"""
+	if not signature_header:
+		return False
+	
+	# Signature format: sha256=<hash>
+	if not signature_header.startswith("sha256="):
+		return False
+	
+	received_signature = signature_header[7:]  # Remove "sha256=" prefix
+	
+	# Get any active WhatsApp account with app_secret configured
+	accounts = frappe.get_all(
+		"WhatsApp Account",
+		filters={"status": "Active"},
+		fields=["name"]
+	)
+	
+	for acc in accounts:
+		try:
+			account_doc = frappe.get_doc("WhatsApp Account", acc.name)
+			app_secret = account_doc.get_password("app_secret") if account_doc.app_secret else None
+			
+			if not app_secret:
+				continue
+			
+			expected_signature = hmac.new(
+				app_secret.encode(),
+				payload_bytes,
+				hashlib.sha256
+			).hexdigest()
+			
+			if hmac.compare_digest(received_signature, expected_signature):
+				return True
+		except Exception:
+			continue
+	
+	return False
 
 
 @frappe.whitelist(allow_guest=True)
@@ -14,6 +59,21 @@ def webhook():
 	"""Meta webhook."""
 	if frappe.request.method == "GET":
 		return get()
+	
+	# Get raw payload for signature verification
+	payload_bytes = frappe.request.get_data()
+	signature_header = frappe.request.headers.get("X-Hub-Signature-256")
+	
+	# Check if signature verification is required (any account has app_secret)
+	any_secret_configured = frappe.db.exists(
+		"WhatsApp Account",
+		{"status": "Active", "app_secret": ["is", "set"]}
+	)
+	
+	if any_secret_configured and signature_header:
+		if not verify_webhook_signature(payload_bytes, signature_header):
+			frappe.log_error("Invalid webhook signature", "WhatsApp Security")
+			return Response("Forbidden", status=403)
 	
 	data = frappe.local.form_dict
 	# Return 200 OK immediately to Meta to prevent retries
@@ -25,6 +85,7 @@ def webhook():
 		now=frappe.flags.in_test
 	)
 	return Response("OK", status=200)
+
 
 
 def process_webhook_data(data):
