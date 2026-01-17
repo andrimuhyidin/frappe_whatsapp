@@ -53,6 +53,15 @@ class WhatsAppMessage(Document):
     def before_insert(self):
         """Send message if it's Outgoing and not already Sent."""
         self.set_whatsapp_account()
+        
+        # Scheduling Logic
+        if self.is_scheduled and self.scheduled_time:
+            from frappe.utils import get_datetime, now_datetime
+            if get_datetime(self.scheduled_time) > now_datetime():
+                self.scheduling_status = "Pending"
+                self.status = "Queued"
+                return  # Don't send yet
+
         if self.type == "Outgoing" and self.status != "Success":
             # Just mark for sending or try immediate send
             # For robustness, we try immediate send

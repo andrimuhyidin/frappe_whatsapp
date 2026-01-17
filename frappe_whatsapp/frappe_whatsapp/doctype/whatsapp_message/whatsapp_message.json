@@ -42,6 +42,10 @@
   "bulk_message_reference",
   "column_break_efrb",
   "reference_name",
+  "section_break_scheduling",
+  "is_scheduled",
+  "scheduled_time",
+  "scheduling_status",
   "retry_count",
   "next_retry_time",
   "last_error"
@@ -293,6 +297,32 @@
    "fieldname": "last_error",
    "fieldtype": "Small Text",
    "label": "Last Error",
+   "read_only": 1
+  },
+  {
+   "fieldname": "section_break_scheduling",
+   "fieldtype": "Section Break",
+   "label": "Scheduling",
+   "collapsible": 1
+  },
+  {
+   "default": "0",
+   "fieldname": "is_scheduled",
+   "fieldtype": "Check",
+   "label": "Is Scheduled"
+  },
+  {
+   "depends_on": "eval:doc.is_scheduled == 1",
+   "fieldname": "scheduled_time",
+   "fieldtype": "Datetime",
+   "label": "Scheduled Time"
+  },
+  {
+   "depends_on": "eval:doc.is_scheduled == 1",
+   "fieldname": "scheduling_status",
+   "fieldtype": "Select",
+   "label": "Scheduling Status",
+   "options": "Pending\nSent\nCancelled",
    "read_only": 1
   },
   {
