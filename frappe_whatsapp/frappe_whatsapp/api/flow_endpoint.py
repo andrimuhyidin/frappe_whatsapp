@@ -18,6 +18,9 @@ def handle_flow_request():
 
     Endpoint URL to configure in Meta:
     https://your-site.com/api/method/frappe_whatsapp.frappe_whatsapp.api.flow_endpoint.handle_flow_request
+    
+    Security: Signature verification is performed for POST requests when
+    app_secret is configured in WhatsApp Settings.
     """
     try:
         # Get request data
@@ -27,6 +30,11 @@ def handle_flow_request():
 
         # POST request - actual flow data
         data = frappe.request.get_json()
+        
+        # Verify signature for security
+        if not _verify_flow_signature():
+            frappe.local.response.http_status_code = 403
+            return {"error": "Invalid signature"}
 
         if not data:
             frappe.throw(_("No data received"))
@@ -135,6 +143,58 @@ def save_flow_data(flow_token, screen, form_data):
             )
     except Exception as e:
         frappe.log_error(f"save_flow_data error: {str(e)}")
+
+
+def _verify_flow_signature():
+    """Verify the WhatsApp Flow request signature.
+    
+    Returns True if:
+    - No app_secret is configured (signature verification disabled)
+    - Signature is valid
+    
+    Returns False if:
+    - Signature is missing when app_secret is configured
+    - Signature is invalid
+    """
+    try:
+        # Get app secret from WhatsApp Settings
+        settings = frappe.get_single("WhatsApp Settings")
+        app_secret = settings.get_password("app_secret") if settings else None
+        
+        if not app_secret:
+            # No secret configured, skip verification
+            # Log warning for security awareness
+            frappe.log_error(
+                "WhatsApp Flow endpoint: No app_secret configured. "
+                "Consider configuring app_secret for enhanced security.",
+                "WhatsApp Flow Security Warning"
+            )
+            return True
+        
+        # Get signature from header
+        signature_header = frappe.request.headers.get("X-Hub-Signature-256", "")
+        if not signature_header:
+            frappe.log_error(
+                "WhatsApp Flow request missing X-Hub-Signature-256 header",
+                "WhatsApp Flow Signature Error"
+            )
+            return False
+        
+        # Extract signature value (format: sha256=<signature>)
+        if signature_header.startswith("sha256="):
+            signature = signature_header[7:]
+        else:
+            signature = signature_header
+        
+        # Get raw payload
+        payload = frappe.request.get_data(as_text=True)
+        
+        # Verify signature
+        return verify_signature(payload, signature, app_secret)
+        
+    except Exception as e:
+        frappe.log_error(f"Flow signature verification error: {str(e)}")
+        return False
 
 
 def verify_signature(payload, signature, app_secret):
