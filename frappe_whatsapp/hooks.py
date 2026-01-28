@@ -7,6 +7,10 @@ app_description = "WhatsApp integration for frappe"
 app_email = "shridhar.p@zerodha.com"
 app_license = "MIT"
 
+# Optional dependencies (checked at runtime)
+# This app can work standalone or integrate with ERPNext
+optional_apps = ["erpnext", "webshop"]
+
 # Module Setup
 # ------------
 setup = {
