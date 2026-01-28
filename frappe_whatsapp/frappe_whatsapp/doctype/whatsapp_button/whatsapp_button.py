@@ -5,4 +5,11 @@
 from frappe.model.document import Document
 
 class WhatsAppButton(Document):
+	"""
+	WhatsApp Button child table entry.
+	
+	Defines interactive buttons for WhatsApp messages
+	including quick replies and call-to-action buttons.
+	"""
+
 	pass

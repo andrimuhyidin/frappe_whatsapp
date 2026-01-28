@@ -5,4 +5,11 @@ from frappe.model.document import Document
 
 
 class WhatsAppFlowField(Document):
+    """
+    WhatsApp Flow Field child table entry.
+    
+    Defines form fields within a WhatsApp Flow screen
+    for collecting user input like text, dates, and selections.
+    """
+
     pass

@@ -1,0 +1,111 @@
+{
+ "actions": [],
+ "autoname": "format:WA-MEDIA-{####}",
+ "creation": "2026-01-18 14:10:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "title",
+  "media_type",
+  "file",
+  "column_break_1",
+  "whatsapp_account",
+  "category",
+  "section_break_meta",
+  "meta_media_id",
+  "meta_url",
+  "column_break_meta",
+  "caption"
+ ],
+ "fields": [
+  {
+   "fieldname": "title",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Title",
+   "reqd": 1
+  },
+  {
+   "fieldname": "media_type",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Media Type",
+   "options": "Image\nVideo\nDocument\nAudio",
+   "reqd": 1
+  },
+  {
+   "fieldname": "file",
+   "fieldtype": "Attach",
+   "label": "File",
+   "reqd": 1
+  },
+  {
+   "fieldname": "column_break_1",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "whatsapp_account",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "WhatsApp Account",
+   "options": "WhatsApp Account"
+  },
+  {
+   "fieldname": "category",
+   "fieldtype": "Select",
+   "label": "Category",
+   "options": "Promotion\nSupport\nOnboarding\nOther"
+  },
+  {
+   "fieldname": "section_break_meta",
+   "fieldtype": "Section Break",
+   "label": "Meta API Info"
+  },
+  {
+   "description": "Media ID returned by Meta after upload",
+   "fieldname": "meta_media_id",
+   "fieldtype": "Data",
+   "label": "Meta Media ID",
+   "read_only": 1
+  },
+  {
+   "fieldname": "meta_url",
+   "fieldtype": "Data",
+   "label": "Meta URL",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_meta",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "caption",
+   "fieldtype": "Small Text",
+   "label": "Default Caption"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2026-01-18 14:10:00.000000",
+ "modified_by": "Administrator",
+ "module": "Frappe WhatsApp",
+ "name": "WhatsApp Media Library",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "track_changes": 1
+}

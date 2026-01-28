@@ -1,0 +1,18 @@
+{
+ "chart_name": "WhatsApp ROI Overview",
+ "chart_type": "Bar",
+ "creation": "2026-01-18 13:30:00.000:000",
+ "docstatus": 0,
+ "doctype": "Dashboard Chart",
+ "is_public": 1,
+ "label": "Revenue from WhatsApp (IDR)",
+ "modified": "2026-01-18 13:30:00.000:000",
+ "modified_by": "Administrator",
+ "module": "Frappe Whatsapp",
+ "name": "WhatsApp ROI Overview",
+ "owner": "Administrator",
+ "source_name": "Sales Order",
+ "type": "Sum",
+ "value_field": "base_grand_total",
+ "filters_json": "[[\"Sales Order\",\"reference_doctype\",\"=\",\"WhatsApp Message\"]]"
+}

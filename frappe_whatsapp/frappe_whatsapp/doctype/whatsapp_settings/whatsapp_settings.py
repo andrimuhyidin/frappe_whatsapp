@@ -5,4 +5,11 @@
 from frappe.model.document import Document
 
 class WhatsAppSettings(Document):
+	"""
+	WhatsApp Settings for global integration configuration.
+	
+	Single DocType storing WhatsApp Business API credentials,
+	webhook URLs, and other global settings.
+	"""
+
 	pass

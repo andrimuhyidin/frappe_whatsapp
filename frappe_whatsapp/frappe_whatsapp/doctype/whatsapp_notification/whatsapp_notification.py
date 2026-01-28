@@ -14,7 +14,13 @@ from frappe_whatsapp.utils import get_whatsapp_account
 
 
 class WhatsAppNotification(Document):
-    """Notification."""
+    """
+    WhatsApp Notification for automated message triggers.
+    
+    Configures automated WhatsApp messages triggered by document
+    events, scheduled times, or custom conditions with template
+    support and field mapping.
+    """
 
     def validate(self):
         """Validate."""

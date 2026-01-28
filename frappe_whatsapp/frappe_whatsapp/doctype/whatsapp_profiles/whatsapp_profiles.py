@@ -6,6 +6,13 @@ from frappe.model.document import Document
 from frappe_whatsapp.utils import format_number
 
 class WhatsAppProfiles(Document):
+    """
+    WhatsApp Profiles for contact information storage.
+    
+    Stores WhatsApp user profile information including
+    profile names and phone numbers for contact management.
+    """
+
     def validate(self):
         self.format_whatsapp_number()
         self.set_title()

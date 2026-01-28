@@ -5,4 +5,11 @@
 from frappe.model.document import Document
 
 class WhatsAppMessageFields(Document):
+	"""
+	WhatsApp Message Fields child table entry.
+	
+	Stores field mappings for template variables allowing
+	dynamic content in WhatsApp message templates.
+	"""
+
 	pass

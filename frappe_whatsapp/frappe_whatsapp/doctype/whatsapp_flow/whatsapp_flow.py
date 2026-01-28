@@ -9,6 +9,13 @@ from frappe.integrations.utils import make_post_request, make_request
 
 
 class WhatsAppFlow(Document):
+    """
+    WhatsApp Flow for interactive multi-screen experiences.
+    
+    Creates WhatsApp Flows with multiple screens, form inputs,
+    and navigation for collecting user data and guiding conversations.
+    """
+
     def before_save(self):
         """Generate flow JSON before saving."""
         self.flow_json = json.dumps(self.generate_flow_json(), indent=2)

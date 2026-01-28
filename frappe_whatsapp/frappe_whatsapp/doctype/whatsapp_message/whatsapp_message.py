@@ -9,6 +9,13 @@ from frappe.integrations.utils import make_post_request
 from frappe_whatsapp.utils import get_whatsapp_account, format_number
 
 class WhatsAppMessage(Document):
+    """
+    WhatsApp Message for storing sent and received messages.
+    
+    Stores all WhatsApp message history including text, media,
+    templates, and interactive messages with delivery status.
+    """
+
     def validate(self):
         self.set_whatsapp_account()
 

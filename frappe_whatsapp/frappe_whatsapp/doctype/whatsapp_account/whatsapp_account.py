@@ -6,6 +6,13 @@ from frappe.model.document import Document
 
 
 class WhatsAppAccount(Document):
+	"""
+	WhatsApp Account for managing multiple business accounts.
+	
+	Stores WhatsApp Business API credentials and configuration
+	for multiple phone numbers with default incoming/outgoing settings.
+	"""
+
 	def on_update(self):
 		"""Check there is only one default of each type."""
 		self.there_must_be_only_one_default()

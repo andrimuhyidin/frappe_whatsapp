@@ -15,6 +15,13 @@ from frappe.model.naming import make_autoname
 # frappe_whatsapp/frappe_whatsapp/doctype/bulk_whatsapp_message/bulk_whatsapp_message.py
 
 class BulkWhatsAppMessage(Document):
+    """
+    Bulk WhatsApp Message for mass messaging operations.
+    
+    Handles sending WhatsApp messages to multiple recipients
+    with progress tracking, batch processing, and error handling.
+    """
+
     def autoname(self):
         self.name = make_autoname("BULK-WA-.YYYY.-.#####")
     

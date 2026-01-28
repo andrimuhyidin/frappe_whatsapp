@@ -1,0 +1,70 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2026-01-18 12:40:00.000000",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "is_tax_setup",
+  "is_payments_setup",
+  "is_whatsapp_setup",
+  "setup_completed",
+  "column_break_xsuw",
+  "current_step"
+ ],
+ "fields": [
+  {
+   "fieldname": "is_tax_setup",
+   "fieldtype": "Check",
+   "label": "Tax Setup Completed"
+  },
+  {
+   "fieldname": "is_payments_setup",
+   "fieldtype": "Check",
+   "label": "Payments Setup Completed"
+  },
+  {
+   "fieldname": "is_whatsapp_setup",
+   "fieldtype": "Check",
+   "label": "WhatsApp Setup Completed"
+  },
+  {
+   "fieldname": "setup_completed",
+   "fieldtype": "Check",
+   "label": "Setup Fully Completed"
+  },
+  {
+   "fieldname": "column_break_xsuw",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "current_step",
+   "fieldtype": "Int",
+   "label": "Current Step",
+   "default": "0"
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "issingle": 1,
+ "links": [],
+ "modified": "2026-01-18 12:40:00.000000",
+ "modified_by": "Administrator",
+ "module": "Frappe Whatsapp",
+ "name": "Onboarding Settings",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "print": 1,
+   "read": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "states": []
+}

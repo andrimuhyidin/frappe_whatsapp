@@ -13,7 +13,13 @@ from frappe.desk.form.utils import get_pdf_link
 from frappe_whatsapp.utils import get_whatsapp_account
 
 class WhatsAppTemplates(Document):
-    """Create whatsapp template."""
+    """
+    WhatsApp Templates for pre-approved message templates.
+    
+    Manages WhatsApp Business API message templates including
+    creation, submission for approval, and status synchronization
+    with Meta's template approval system.
+    """
 
     def validate(self):
         self.set_whatsapp_account()

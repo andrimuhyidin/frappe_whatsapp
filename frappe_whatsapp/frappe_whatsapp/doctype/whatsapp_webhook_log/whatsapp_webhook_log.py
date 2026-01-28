@@ -4,6 +4,13 @@ from frappe_whatsapp.utils import webhook
 
 
 class WhatsAppWebhookLog(Document):
+    """
+    WhatsApp Webhook Log for debugging and replay.
+    
+    Records incoming webhook requests from WhatsApp Business API
+    with replay capability for debugging message processing.
+    """
+
     @frappe.whitelist()
     def replay_webhook(self):
         """Replay this webhook."""

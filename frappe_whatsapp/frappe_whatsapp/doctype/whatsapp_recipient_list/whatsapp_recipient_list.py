@@ -5,6 +5,13 @@ from frappe.model.document import Document
 
 
 class WhatsAppRecipientList(Document):
+	"""
+	WhatsApp Recipient List for managing contact groups.
+	
+	Stores collections of recipients for bulk messaging
+	with import capabilities from other DocTypes.
+	"""
+
 	def validate(self):
 		self.validate_recipients()
 	

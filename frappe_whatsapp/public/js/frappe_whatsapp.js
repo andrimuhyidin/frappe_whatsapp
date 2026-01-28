@@ -2,7 +2,17 @@ $(document).on("app_ready", function () {
   // waiting for page to load completely
   frappe.router.on("change", () => {
     var route = frappe.get_route();
-    // all form's menu add the 'Send To Telegram' funcationality
+
+    // Onboarding Redirect
+    if (route && route[0] == "Workspaces" && route[1] == "WhatsApp Integration") {
+      frappe.db.get_single_value('Onboarding Settings', 'setup_completed').then(val => {
+        if (!val) {
+          frappe.set_route('setup-wizard');
+        }
+      });
+    }
+
+    // all form's menu add the 'Send To Whatsapp' functionality
     if (route && route[0] == "Form") {
       frappe.ui.form.on(route[1], {
         refresh: function (frm) {
